@@ -65,4 +65,3 @@ def main():
 
 # MENJALANKAN PROGRAM UTAMA
 main()
-print("Lol")
