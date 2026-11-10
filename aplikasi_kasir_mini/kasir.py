@@ -1,4 +1,4 @@
-# SOLO PROJECT BULAN 1: APLIKASI KASIR MINI (TAHAP 1)
+# SOLO PROJECT BULAN 1: APLIKASI KASIR MINI (VERSI FINAL)
 
 # 1. FUNGSI MENAMPILKAN MENU
 def tampilkan_menu():
@@ -18,7 +18,6 @@ def tambah_item(list_nama, list_harga, list_jumlah):
     harga = int(input("Harga satuan  : Rp "))
     jumlah = int(input("Jumlah beli   : "))
     
-    # Menyimpan data ke dalam 3 list paralel
     list_nama.append(nama)
     list_harga.append(harga)
     list_jumlah.append(jumlah)
@@ -31,11 +30,9 @@ def lihat_keranjang(list_nama, list_harga, list_jumlah):
     
     if len(list_nama) == 0:
         print("Keranjang belanja masih kosong.")
-        return 0  # Mengembalikan nilai total = 0
+        return 0
         
     total_keseluruhan = 0
-    
-    # Menggunakan range(len(...)) untuk mengakses index ke-i dari ketiga list secara bersamaan
     for i in range(len(list_nama)):
         subtotal = list_harga[i] * list_jumlah[i]
         total_keseluruhan = total_keseluruhan + subtotal
@@ -45,9 +42,44 @@ def lihat_keranjang(list_nama, list_harga, list_jumlah):
         
     print("------------------------------------------")
     print("TOTAL BELANJA : Rp " + str(total_keseluruhan))
-    return total_keseluruhan  # Mengembalikan angka total agar bisa dipakai di menu pembayaran besok!
+    return total_keseluruhan
 
-# 4. PROGRAM UTAMA (MAIN ENGINE)
+# 4. FUNGSI BARU: PROSES PEMBAYARAN & CETAK STRUK
+def proses_pembayaran(list_nama, list_harga, list_jumlah):
+    # Memanggil fungsi lihat_keranjang() untuk menampilkan rincian & mengambil total tagihan
+    total_tagihan = lihat_keranjang(list_nama, list_harga, list_jumlah)
+    
+    # Jika keranjang kosong (total = 0), hentikan proses pembayaran
+    if total_tagihan == 0:
+        return
+        
+    print("\n--- PEMBAYARAN ---")
+    # Menggunakan while True agar kasir bisa mengulang input jika uang pembeli kurang
+    while True:
+        uang_bayar = int(input("Masukkan jumlah uang tunai: Rp "))
+        
+        if uang_bayar < total_tagihan:
+            kurang = total_tagihan - uang_bayar
+            print("Uang tidak cukup! Kurang sebesar: Rp " + str(kurang))
+        else:
+            kembalian = uang_bayar - total_tagihan
+            print("\n==========================================")
+            print("           STRUK PEMBAYARAN LUNAS         ")
+            print("==========================================")
+            print("Total Tagihan : Rp " + str(total_tagihan))
+            print("Uang Tunai    : Rp " + str(uang_bayar))
+            print("Kembalian     : Rp " + str(kembalian))
+            print("==========================================")
+            print("    Terima Kasih Atas Kunjungan Anda!     ")
+            print("==========================================")
+            
+            # Mengosongkan keranjang belanja untuk pelanggan berikutnya
+            list_nama.clear()
+            list_harga.clear()
+            list_jumlah.clear()
+            break  # Keluar dari loop pembayaran
+
+# 5. PROGRAM UTAMA (MAIN ENGINE)
 def main():
     nama_barang = []
     harga_barang = []
@@ -62,7 +94,8 @@ def main():
         elif pilihan == "2":
             lihat_keranjang(nama_barang, harga_barang, jumlah_barang)
         elif pilihan == "3":
-            print("Fitur pembayaran akan kita buat di Hari 5!")
+            # Memanggil fungsi pembayaran yang baru dibuat
+            proses_pembayaran(nama_barang, harga_barang, jumlah_barang)
         elif pilihan == "4":
             print("Terima kasih telah menggunakan Aplikasi Kasir Mini!")
             break
